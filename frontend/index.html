@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Shortener</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      background: #f5f5f5;
+      color: #222;
+      padding: 2rem;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    h1 { font-size: 1.4rem; margin-bottom: 1.5rem; }
+    h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .row { display: flex; gap: 1rem; }
+    .row .card { flex: 1; }
+
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+      font-size: 13px;
+      color: #444;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="url"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 13px;
+      margin-bottom: 0.75rem;
+    }
+
+    input:focus { outline: 2px solid #0066cc; border-color: transparent; }
+
+    button {
+      padding: 0.4rem 0.9rem;
+      font-size: 13px;
+      border: 1px solid #bbb;
+      border-radius: 3px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    button:hover { background: #f0f0f0; }
+
+    button.primary {
+      background: #0066cc;
+      color: #fff;
+      border-color: #0055aa;
+    }
+
+    button.primary:hover { background: #0055aa; }
+
+    button.danger {
+      color: #cc0000;
+      border-color: #cc0000;
+    }
+
+    button.danger:hover { background: #fff0f0; }
+
+    pre {
+      background: #f8f8f8;
+      border: 1px solid #e0e0e0;
+      border-radius: 3px;
+      padding: 0.6rem 0.8rem;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-top: 0.75rem;
+      min-height: 2rem;
+    }
+
+    pre:empty { display: none; }
+
+    .api-key-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .api-key-row input { flex: 1; margin-bottom: 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    th {
+      background: #f5f5f5;
+      font-weight: 600;
+      color: #555;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+
+    td a { color: #0066cc; text-decoration: none; }
+    td a:hover { text-decoration: underline; }
+
+    .table-actions { display: flex; gap: 0.4rem; }
+
+    #analytics-section { margin-top: 0; }
+    #analytics-section h2 { display: flex; align-items: center; justify-content: space-between; }
+
+    .empty-row td { color: #999; font-style: italic; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <h1>URL Shortener</h1>
+
+  <!-- ── Auth ───────────────────────────────────────────────────────────── -->
+  <div class="row">
+    <div class="card">
+      <h2>Register</h2>
+      <form id="register-form">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="you@example.com" required>
+        <label>Password</label>
+        <input type="password" name="password" minlength="8" placeholder="min 8 characters" required>
+        <button type="submit" class="primary">Register</button>
+      </form>
+      <pre id="register-out"></pre>
+    </div>
+
+    <div class="card">
+      <h2>Login</h2>
+      <form id="login-form">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="you@example.com" required>
+        <label>Password</label>
+        <input type="password" name="password" required>
+        <button type="submit" class="primary">Login</button>
+      </form>
+      <pre id="login-out"></pre>
+    </div>
+  </div>
+
+  <!-- ── API Key ─────────────────────────────────────────────────────────── -->
+  <div class="card">
+    <h2>API Key</h2>
+    <div class="api-key-row">
+      <input id="api-key-input" type="text" placeholder="sk_... (auto-filled on login)">
+      <button id="clear-key-btn">Clear</button>
+    </div>
+  </div>
+
+  <!-- ── Shorten ─────────────────────────────────────────────────────────── -->
+  <div class="card">
+    <h2>Shorten a URL</h2>
+    <form id="shorten-form">
+      <label>URL</label>
+      <input type="url" name="url" placeholder="https://example.com/long/path" required>
+      <label>Custom slug <span style="font-weight:400;color:#888">(optional)</span></label>
+      <input type="text" name="slug" placeholder="my-link">
+      <button type="submit" class="primary">Shorten</button>
+    </form>
+    <pre id="shorten-out"></pre>
+  </div>
+
+  <!-- ── My Links ────────────────────────────────────────────────────────── -->
+  <div class="card">
+    <h2 style="display:flex;align-items:center;justify-content:space-between">
+      My Links
+      <button id="refresh-btn">Refresh</button>
+    </h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Slug</th>
+          <th>Short URL</th>
+          <th>Original URL</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="links-body">
+        <tr class="empty-row"><td colspan="5">— not loaded —</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Analytics ───────────────────────────────────────────────────────── -->
+  <div id="analytics-section" class="card" style="display:none">
+    <h2>
+      Analytics: <span id="analytics-slug"></span>
+      <button id="close-analytics-btn">Close</button>
+    </h2>
+    <pre id="analytics-out"></pre>
+  </div>
+
+</div>
+<script type="module" src="./main.ts"></script>
+</body>
+</html>

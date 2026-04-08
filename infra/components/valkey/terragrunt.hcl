@@ -4,7 +4,7 @@ include "root" {
 
 
 terraform {
-  source = "git::git@github.com:terraform-aws-modules/terraform-aws-elasticache.git?ref=v1.11.0//modules/serverless-cache"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-elasticache.git//modules/serverless-cache?ref=v1.11.0"
 }
 
 dependencies {

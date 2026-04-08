@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "git::ssh://git@github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-role?ref=v6.4.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-iam.git//modules/iam-role?ref=v6.4.0"
 }
 
 

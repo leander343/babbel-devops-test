@@ -84,6 +84,25 @@ jobs:
         with:
           script: |
             const fs = require('fs');
+            
+            // Read and strip ANSI color codes
+            let output = fs.readFileSync('./plan_output.txt', 'utf8');
+            output = output.replace(/\x1B\[[0-9;]*[mGKHF]/g, '');
+
+            const truncated = output.length > 60000
+              ? output.substring(0, 60000) + '\n\n... output truncated, check Actions logs for full output ...'
+              : output;
+
+            const body = [
+              `<details>`,
+              `<summary>📋 Full plan output</summary>`,
+              ``,
+              `\`\`\``,
+              truncated,
+              `\`\`\``,
+              `</details>`,
+              ``,
+            ].join('\n');
             const output = fs.readFileSync('infra/dev/plan_output.txt', 'utf8');
             const truncated = output.length > 60000
               ? output.substring(0, 60000) + '\n\n... truncated ...'

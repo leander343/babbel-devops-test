@@ -23,8 +23,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-  defaults:
-    run:
+    defaults:
+     run:
       working-directory: backend
 
     steps:

@@ -103,8 +103,16 @@ jobs:
               `</details>`,
               ``,
             ].join('\n');
-
-            console.log(body);
+            const output = fs.readFileSync('infra/dev/plan_output.txt', 'utf8');
+            const truncated = output.length > 60000
+              ? output.substring(0, 60000) + '\n\n... truncated ...'
+              : output;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Terragrunt Plan\n\`\`\`hcl\n${truncated}\n\`\`\``
+            });
 
       - name: Fail if Plan failed
         if: steps.plan.outcome == 'failure'

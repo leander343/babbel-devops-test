@@ -6,8 +6,7 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      action:
+     
 
 
 jobs:
@@ -31,24 +30,24 @@ jobs:
         env:
           REDIS_URL: redis://localhost:6379
           NODE_ENV: test
-          RATE_LIMIT_REGISTER:5   
-          RATE_LIMIT_LOGIN:10      
-          RATE_LIMIT_REDIRECT:60
+          RATE_LIMIT_REGISTER: 5   
+          RATE_LIMIT_LOGIN: 10      
+          RATE_LIMIT_REDIRECT: 60
 
-        steps:
-           - name: Checkout
-             uses: actions/checkout@v4
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
 
-           - name: Setup Bun
-             uses: oven-sh/setup-bun@v2
-             with:
-               bun-version: latest
+        - name: Setup Bun
+          uses: oven-sh/setup-bun@v2
+          with:
+            bun-version: latest
 
-           - name: Install dependencies
-             run: bun install --frozen-lockfile
+        - name: Install dependencies
+          run: bun install --frozen-lockfile
 
-           - name: Type check
-             run: bun tsc --noEmit
+        - name: Type check
+          run: bun tsc --noEmit
 
-           - name: Run tests
-             run: bun test --coverage
+        - name: Run tests
+          run: bun test --coverage

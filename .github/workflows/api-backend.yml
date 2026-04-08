@@ -152,12 +152,19 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Set image URI
-        id: image
-        run: |
-          IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ needs.build-and-push.outputs.image_tag }}"
-          echo "uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
+      - name: Get image digest
+        id: digest
+        run: |
+          DIGEST=$(aws ecr describe-images \
+            --repository-name ${{ env.ECR_REPOSITORY }} \
+            --image-ids imageTag=${{ needs.build-and-push.outputs.image_tag }} \
+            --query 'imageDetails[0].imageDigest' \
+            --output text)
+
+           IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}@${DIGEST}"
+           echo "uri=$IMAGE_URI" >> $GITHUB_OUTPUT
+  
       - name: Update image in task definition
         id: update-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1.8.0

@@ -309,6 +309,66 @@ Returns Redis connectivity status. Used by the ALB health check.
 
 ---
 
+
+## Testing Backend flow using CURL
+
+1. Register a user
+```bash
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email": "you@example.com", "password": "password123"}'
+```
+2. Login and get your API key
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "you@example.com", "password": "password123"}'
+```
+You'll get back something like:
+```json
+{ "apiKey": "sk_a3f9c2..." }
+```
+Copy that key — you'll use it as the Bearer token in all subsequent requests.
+3. Create a short link
+```bash
+curl -X POST http://localhost:3000/links \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk_a3f9c2..." \
+  -d '{"url": "https://example.com/some/very/long/url"}'
+```
+4. Create with a custom slug
+```bash
+curl -X POST http://localhost:3000/links \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk_a3f9c2..." \
+  -d '{"url": "https://example.com", "slug": "my-link"}'
+```
+5. Use the short link (public, no auth)
+```bash
+curl -L http://localhost:3000/my-link
+```
+ link follows the redirect
+6. List your links
+```bash
+curl http://localhost:3000/links \
+  -H "Authorization: Bearer sk_a3f9c2..."
+```
+7. View analytics for a link
+```bash
+curl http://localhost:3000/links/my-link/analytics \
+  -H "Authorization: Bearer sk_a3f9c2..."
+```
+8. Delete a link
+```bash
+curl -X DELETE http://localhost:3000/links/my-link \
+  -H "Authorization: Bearer sk_a3f9c2..."
+```
+9. Revoke your API key
+```bash
+curl -X DELETE http://localhost:3000/auth/keys/sk_a3f9c2... \
+  -H "Authorization: Bearer sk_a3f9c2..."
+```
+
 ## Running Tests
 
 Tests use Bun's built-in test runner. Redis is fully mocked in-memory — no running Redis instance needed.
@@ -351,3 +411,5 @@ The Dockerfile is a two-stage build — production dependencies only, non-root u
 **Slug collisions** — if two URLs produce the same 8-char SHA-256 prefix, the second `POST /links` without a custom slug returns the existing entry. Use a custom slug when uniqueness is critical.
 
 **Multiple API keys** — each login issues a new key; old keys stay valid. Use `GET /auth/keys` to audit active keys and `DELETE /auth/keys/:key` to revoke any you no longer need.
+
+

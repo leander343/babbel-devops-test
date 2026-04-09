@@ -17,7 +17,6 @@ A full-stack URL shortener built with TypeScript, deployed on AWS ECS with infra
 ## Architecture
 ![Architecture](docs/diagrams/url_shortener.png)
 
-
 ---
  
 ## Repository structure
@@ -43,6 +42,13 @@ A full-stack URL shortener built with TypeScript, deployed on AWS ECS with infra
  
 ---
 
+## DEMO URL
+| Component | URL |
+|------------|---------|
+| Frontend | https://leander343.github.io/babbel-devops-test/|
+| Backend(SSL) |  https://d3et0ngjkxwl3j.cloudfront.net |
+
+Note: Since I don't own a domain, the ALB is placed behind a Cloudfront distribution just to mandate SSL and get it working with Github pages. The Frontend here is a handy tool to out the tool. 
 
 ## Known improvements
  
@@ -51,8 +57,8 @@ These are areas identified during development that would be addressed in a more 
 **1. Secrets and parameters**
 There is currently some manual clickops involved in wiring up environment variables and GitHub Actions secrets after provisioning. This can be automated away by writing Terragrunt outputs directly to SSM Parameter Store, then having the CI/CD pipeline pull them from SSM at runtime rather than requiring manual secret entry in the GitHub UI. A bootstrapping script would also make spinning up new environments much more self-contained
  
-**2. WAF **
-The current WAF setup uses AWS WAF v2 with managed rule sets, which covers the basics but is relatively coarse. Given the choice, Cloudflare is a stronger option as its bot management, DDoS mitigation, and traffic analysis tooling are significantly more capable, and its WAF rules are easier to reason about and tune. Migrating would involve pointing the ALB behind a Cloudflare proxy and removing the AWS WAF association.
+**2. WAF**
+The current WAF setup uses AWS WAF v2 with managed rule sets, which covers the basics but is relatively coarse. Given the choice, Cloudflare is a stronger option as its bot management, DDoS mitigation, and traffic analysis tooling are significantly more capable, and its WAF rules are easier to reason about and tune. Migrating would involve pointing the ALB behind a Cloudflare proxy and removing the AWS WAF association. 
  
 **3. Multi-environment extensibility**
 The Terragrunt stack structure can be extended to supports multiple environments by moving current stack files into respective `infra/envs/<env>/terragrunt.stack.hcl`. Extending to  new environments aftewards (e.g. `staging`) is straightforward as adding a new stack file with its own locals. The main remaining work is adding conditionals to the CI/CD matrix and ensuring environment-specific variable sets are managed consistently, likely through the SSM approach mentioned above.

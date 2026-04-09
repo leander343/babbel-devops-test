@@ -167,8 +167,3 @@ Dependencies between components are managed through Terragrunt's `dependency` bl
 
 Components are organized with dependency management through Terragrunt. Each component references outputs from other components as needed.
 
-## Best Practices
-
-- Use `terragrunt.hcl` for component-specific configuration
-- Store environment variables in `_env/` directory
-- Keep Terraform source code in component subdirectories (e.g., `*-tf-source/`)

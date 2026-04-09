@@ -15,7 +15,7 @@ A full-stack URL shortener built with TypeScript, deployed on AWS ECS with infra
  
 
 ## Architecture
-![Architecture](docs/diagrams/url-shortener.png)
+![Architecture](docs/diagrams/url_shortener.png)
 
 
 ---

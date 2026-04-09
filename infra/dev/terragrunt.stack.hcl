@@ -152,6 +152,16 @@ path = "ecs-cwatch"
 
 
 
+unit "cloudfront" {
+  source = "../components/cloudfront"
+  path   = "cloudfront"
+  values = {
+    name        = "${local.project}"
+    environment = "${local.environment}"
+  }
+}
+
+
 
 
 

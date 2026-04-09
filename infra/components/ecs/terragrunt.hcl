@@ -74,14 +74,14 @@ dependency "aws_data" {
   config_path = "../common/data"
 
    mock_outputs = {
-        ecs_image_url = "12345.dkpim"
+        ecs_image_tag = "12345.dkpim"
     }
 }
 
 
 inputs = {
 
- cluster_name = "${values.name}-${values.environment}-backend"
+ cluster_name = "${values.name}-${values.environment}-cluster"
 
   cluster_configuration = {
     execute_command_configuration = {
@@ -139,6 +139,9 @@ inputs = {
           readonly_root_filesystem = false
 
 
+          track_latest = true
+
+
 
 
           environment = [ 
@@ -152,7 +155,7 @@ inputs = {
             },
             {
               name="CORS"
-              value= get_env("FRONTEND_ADMIN_URL", "http://localhost:5173")
+              value= get_env("FRONTEND_ADMIN_URL", "https://leander343.github.io")
             },
             {
               name="BACKEND_URL"

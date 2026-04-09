@@ -30,9 +30,9 @@ inputs = {
   # type: string
   cidr = values.cidr_block
 
-  # A list of database subnets
-  # type: list(string)
-  database_subnets = [for k, v in dependency.aws-data.outputs.available_aws_availability_zones_names : cidrsubnet("10.0.0.0/16", 8, k + 8)]
+  # Controls if database subnet group should be created
+  # type: bool
+  create_database_subnet_group = false
 
   # Name to be used on all the resources as identifier
   # type: string

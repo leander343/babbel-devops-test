@@ -162,6 +162,16 @@ unit "cloudfront" {
 }
 
 
+unit "waf" {
+  source = "../components/waf"
+  path   = "waf"
+  values = {
+    name        = "${local.project}"
+    environment = "${local.environment}"
+  }
+}
+
+
 
 
 

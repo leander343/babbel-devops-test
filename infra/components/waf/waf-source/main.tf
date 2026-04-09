@@ -2,7 +2,8 @@
 
 resource "aws_wafv2_web_acl" "main" {
   name  = "${var.name}-${var.environment}-waf"
-  scope = "REGIONAL"
+  scope       = "CLOUDFRONT"
+  region = "us-east-1"
 
   default_action {
     allow {}
@@ -86,9 +87,4 @@ resource "aws_wafv2_web_acl" "main" {
   tags = { Name = "${var.name}-${var.environment}-waf" }
 }
 
-resource "aws_wafv2_web_acl_association" "alb" {
-  resource_arn = var.alb_arn
-  web_acl_arn  = aws_wafv2_web_acl.main.arn
-}
 
-output "web_acl_arn" { value = aws_wafv2_web_acl.main.arn }

@@ -59,6 +59,14 @@ dependency "ecs-sg" {
   }
 }
 
+dependency "cloudfront" { 
+  config_path = "../cloudfront"
+
+     mock_outputs = {
+       domain_name = "xxx.cloudfront.net"
+    }
+}
+
 
 
 dependency "ecs-iam" {
@@ -151,7 +159,7 @@ inputs = {
             },
             {
               name="BASE_URL"
-              value="${dependency.alb.outputs.dns_name}"
+              value="https://${dependency.cloudfront.outputs.domain_name}"
             },
             {
               name="CORS"

@@ -9,3 +9,8 @@ variable "name" {
 variable "environment" {
     type = string
 }
+
+
+variable "web_acl_id" {
+    type = string
+}

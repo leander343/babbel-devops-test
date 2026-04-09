@@ -53,8 +53,8 @@ infra/
 ### Prerequisites
 
 - AWS CLI configured with credentials
-- Terragrunt >= 0.48.0
-- Terraform >= 1.0
+- Terragrunt >= 0.75.0
+- OpenTofu >= 1.0
 
 ### Deployment
 

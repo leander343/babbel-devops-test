@@ -48,7 +48,7 @@ A full-stack URL shortener built with TypeScript, deployed on AWS ECS with infra
 | Frontend | https://leander343.github.io/babbel-devops-test/|
 | Backend(SSL) |  https://d3et0ngjkxwl3j.cloudfront.net |
 
-Note: Since I don't own a domain, the ALB is placed behind a Cloudfront distribution just to mandate SSL and get it working with Github pages. The Frontend here is a handy tool to out the tool. 
+Note: Since I don't own a domain, the ALB is placed behind a Cloudfront distribution just to mandate SSL and get it working with Github pages. The Frontend here is a handy tool to test out the tool. 
 
 ## Known improvements
  

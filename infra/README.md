@@ -1,4 +1,4 @@
-# Infrastructure as Code (IaC) - Babbel DevOps
+# URL Shortener — Infrastructure as Code (IaC)
 
 This directory contains the infrastructure configuration for the Babbel DevOps environment using **Terragrunt** and **Terraform**.
 
@@ -29,9 +29,6 @@ infra/
 │   └── dev.hcl                 # Development environment variables
 ├── common/                     # Shared data sources
 │   └── data/
-│       ├── data.tf
-│       ├── outputs.tf
-│       └── variables.tf
 ├── components/                 # Modular infrastructure components
 │   ├── alb/
 │   ├── cloudfront/
@@ -161,9 +158,10 @@ Dependencies between components are managed through Terragrunt's `dependency` bl
 ## Getting Started
 
 1. Configure your AWS credentials
-2. Navigate to the `dev/` directory
-3. Run `terragrunt stack run plan` to preview changes
-4. Run `terragrunt stack run apply` to deploy infrastructure
+2. Create an AWS repo and S3 bucket, dynamo DB state locking is disabled but if enabled a Dynamo DB table needs to be created additionally.
+3. Navigate to the `dev/` directory
+4. Run `terragrunt stack run plan` to preview changes
+5. Run `terragrunt stack run apply` to deploy infrastructure
 
 ## Component Dependencies
 

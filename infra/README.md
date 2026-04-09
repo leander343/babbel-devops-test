@@ -63,10 +63,10 @@ infra/
 cd dev
 
 # 2. Preview changes
-terragrunt plan
+terragrunt stack run plan
 
 # 3. Deploy infrastructure
-terragrunt apply
+terragrunt stack run apply
 ```
 
 ---

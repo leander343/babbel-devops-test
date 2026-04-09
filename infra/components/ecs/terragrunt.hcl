@@ -118,13 +118,13 @@ inputs = {
 
   services = {
      "${values.name}-${values.environment}-api" = {
-      cpu    = 512
-      memory = 1024
+      cpu    = 256
+      memory = 512
 
       container_definitions = {
         "${values.name}-${values.environment}-api" = {
-          cpu       = 512
-          memory    = 1024
+          cpu       = 256
+          memory    = 512
           essential = true
           image     = "${dependency.aws_data.outputs.ecs_image_url}"
           portMappings = [
@@ -190,6 +190,17 @@ inputs = {
 
           enable_cloudwatch_logging = true
           memory_reservation = 100
+
+
+         healthCheck = {
+         command = ["CMD-SHELL",
+                "bun -e \"fetch('http://localhost:3000/health').then(r => { if (!r.ok) process.exit(1) })\""
+               ]          
+          interval    = 30
+          timeout     = 5
+          retries     = 3
+          startPeriod = 60
+         }
         },
       }
 
@@ -201,6 +212,7 @@ inputs = {
           container_port   = 3000
         }
       }
+
 
       create_security_group = false
       subnet_ids = dependency.vpc.outputs.private_subnets
